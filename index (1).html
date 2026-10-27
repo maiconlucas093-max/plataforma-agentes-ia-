@@ -1,0 +1,309 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1020">
+  <meta name="description" content="Painel de controle da sua plataforma de agentes de inteligência artificial.">
+  <title>AgentFlow — Painel de IA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <a href="#inicio" class="brand">
+        <span class="brand-icon">✳</span>
+        <span>Agent<span class="brand-light">Flow</span></span>
+      </a>
+
+      <div class="workspace">
+        <span class="workspace-dot"></span>
+        <div>
+          <strong>Meu espaço</strong>
+          <small>Plano inicial</small>
+        </div>
+        <span class="workspace-arrow">⌄</span>
+      </div>
+
+      <p class="menu-label">MENU PRINCIPAL</p>
+      <nav class="navigation" aria-label="Menu principal">
+        <button class="nav-link active" data-page="inicio">
+          <span>▦</span> Visão geral
+        </button>
+        <button class="nav-link" data-page="agentes">
+          <span>✳</span> Meus agentes
+        </button>
+        <button class="nav-link" data-page="tarefas">
+          <span>◷</span> Tarefas
+        </button>
+        <button class="nav-link" data-page="conversas">
+          <span>▤</span> Conversas
+        </button>
+        <button class="nav-link" data-page="historico">
+          <span>↗</span> Histórico
+        </button>
+      </nav>
+
+      <p class="menu-label second-label">SISTEMA</p>
+      <nav class="navigation" aria-label="Configurações">
+        <button class="nav-link" data-page="configuracoes">
+          <span>⚙</span> Configurações
+        </button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="upgrade-card">
+          <span class="upgrade-icon">✦</span>
+          <strong>Sua central de IA</strong>
+          <p>Prepare seu espaço para novos agentes e automações.</p>
+          <button class="upgrade-button" id="exploreButton">
+            Explorar plataforma →
+          </button>
+        </div>
+        <div class="profile">
+          <div class="avatar">U</div>
+          <div class="profile-info">
+            <strong>Meu perfil</strong>
+            <small>Modo de demonstração</small>
+          </div>
+          <span class="profile-menu">•••</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-button mobile-menu" id="menuButton"
+          aria-label="Abrir menu" aria-expanded="false">☰</button>
+        <div class="breadcrumb">Workspace <span>/</span>
+          <strong id="breadcrumbPage">Visão geral</strong>
+        </div>
+        <div class="topbar-actions">
+          <span class="status"><span></span> Interface local</span>
+          <button class="icon-button" id="helpButton"
+            aria-label="Ajuda">?</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <section class="page active" id="page-inicio">
+          <div class="welcome-row">
+            <div>
+              <p class="eyebrow">CENTRAL DE CONTROLE</p>
+              <h1>Visão geral</h1>
+              <p class="subtitle">Organize seus agentes e prepare suas automações.</p>
+            </div>
+            <button class="primary-button" data-go="agentes">
+              <span>＋</span> Novo agente
+            </button>
+          </div>
+
+          <div class="notice">
+            <div class="notice-icon">i</div>
+            <div>
+              <strong>Bem-vindo à sua plataforma</strong>
+              <p>Este é o painel inicial. Os dados abaixo são demonstrativos.
+                A conexão com a IA e o banco de dados será feita posteriormente.</p>
+            </div>
+            <button class="notice-close" id="dismissNotice"
+              aria-label="Fechar aviso">×</button>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card">
+              <div class="stat-top"><span>Agentes cadastrados</span>
+                <span class="stat-icon purple">✳</span></div>
+              <div class="stat-number" id="agentCount">0</div>
+              <p class="stat-foot">Agentes neste navegador</p>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top"><span>Tarefas registradas</span>
+                <span class="stat-icon blue">◷</span></div>
+              <div class="stat-number" id="taskCount">0</div>
+              <p class="stat-foot">Exemplos ainda não executados</p>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top"><span>Execuções de IA</span>
+                <span class="stat-icon green">↗</span></div>
+              <div class="stat-number">0</div>
+              <p class="stat-foot">Backend ainda não conectado</p>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top"><span>Uso da API</span>
+                <span class="stat-icon orange">ϟ</span></div>
+              <div class="stat-number">—</div>
+              <p class="stat-foot">Disponível após integração</p>
+            </article>
+          </div>
+
+          <div class="section-heading">
+            <div>
+              <h2>Seus agentes</h2>
+              <p>Os assistentes que você configurar aparecerão aqui.</p>
+            </div>
+            <button class="text-button" data-go="agentes">Ver todos →</button>
+          </div>
+
+          <div class="agent-grid" id="homeAgents"></div>
+
+          <div class="section-heading task-heading">
+            <div>
+              <h2>Central de tarefas</h2>
+              <p>Acompanhe as tarefas cadastradas no painel.</p>
+            </div>
+            <button class="text-button" data-go="tarefas">Ver tarefas →</button>
+          </div>
+
+          <div class="table-card">
+            <div class="table-header">
+              <span>TAREFA</span><span>STATUS</span><span>TIPO</span>
+            </div>
+            <div id="homeTasks"></div>
+          </div>
+        </section>
+
+        <section class="page" id="page-agentes">
+          <div class="welcome-row">
+            <div>
+              <p class="eyebrow">AUTOMAÇÃO INTELIGENTE</p>
+              <h1>Meus agentes</h1>
+              <p class="subtitle">Cadastre e organize os seus assistentes.</p>
+            </div>
+            <button class="primary-button" id="newAgentButton">
+              ＋ Criar agente
+            </button>
+          </div>
+          <div class="search-row">
+            <input id="agentSearch" type="search"
+              placeholder="Buscar agentes..." aria-label="Buscar agentes">
+          </div>
+          <div class="agent-grid" id="allAgents"></div>
+        </section>
+
+        <section class="page" id="page-tarefas">
+          <div class="welcome-row">
+            <div>
+              <p class="eyebrow">ORGANIZAÇÃO</p>
+              <h1>Tarefas</h1>
+              <p class="subtitle">Veja as tarefas demonstrativas do painel.</p>
+            </div>
+            <button class="primary-button" id="newTaskButton">
+              ＋ Nova tarefa
+            </button>
+          </div>
+          <div class="task-list" id="allTasks"></div>
+        </section>
+
+        <section class="page" id="page-conversas">
+          <div class="welcome-row">
+            <div>
+              <p class="eyebrow">COMUNICAÇÃO</p>
+              <h1>Conversas</h1>
+              <p class="subtitle">A área de conversas ficará disponível após a integração com a IA.</p>
+            </div>
+          </div>
+          <div class="empty-state">
+            <div class="empty-icon">▤</div>
+            <h2>Nenhuma conversa ainda</h2>
+            <p>Quando conectarmos o backend, você poderá conversar com seus agentes e consultar as mensagens salvas.</p>
+            <button class="secondary-button" data-go="agentes">Ver agentes</button>
+          </div>
+        </section>
+
+        <section class="page" id="page-historico">
+          <div class="welcome-row">
+            <div>
+              <p class="eyebrow">ACOMPANHAMENTO</p>
+              <h1>Histórico</h1>
+              <p class="subtitle">Registro das ações feitas nesta demonstração.</p>
+            </div>
+          </div>
+          <div class="table-card">
+            <div class="table-header">
+              <span>EVENTO</span><span>STATUS</span><span>DETALHE</span>
+            </div>
+            <div id="historyList"></div>
+          </div>
+        </section>
+
+        <section class="page" id="page-configuracoes">
+          <div class="welcome-row">
+            <div>
+              <p class="eyebrow">PERSONALIZAÇÃO</p>
+              <h1>Configurações</h1>
+              <p class="subtitle">Informações básicas deste painel local.</p>
+            </div>
+          </div>
+          <div class="settings-card">
+            <div>
+              <h2>Nome da plataforma</h2>
+              <p>O nome mostrado no menu e no navegador.</p>
+            </div>
+            <input id="platformName" value="AgentFlow"
+              aria-label="Nome da plataforma" maxlength="40">
+            <button class="primary-button" id="saveSettings">Salvar nome</button>
+          </div>
+          <div class="settings-card">
+            <div>
+              <h2>Integrações</h2>
+              <p>As conexões ainda não estão configuradas.</p>
+            </div>
+            <span class="pill pending">Pendente</span>
+          </div>
+          <div class="settings-card">
+            <div>
+              <h2>Segurança</h2>
+              <p>Não coloque senhas ou chaves de API neste frontend.</p>
+            </div>
+            <span class="pill">Backend futuro</span>
+          </div>
+        </section>
+      </div>
+
+      <footer class="footer">
+        <span>AgentFlow <span class="footer-muted">· Painel inicial</span></span>
+        <span>Versão 0.1 · Demonstração local</span>
+      </footer>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="agentModal" hidden>
+    <div class="modal" role="dialog" aria-modal="true"
+      aria-labelledby="modalTitle">
+      <div class="modal-top">
+        <div>
+          <p class="eyebrow">CONFIGURAÇÃO</p>
+          <h2 id="modalTitle">Criar agente</h2>
+        </div>
+        <button class="icon-button" id="closeModal" aria-label="Fechar">×</button>
+      </div>
+      <form id="agentForm">
+        <label for="agentName">Nome do agente</label>
+        <input id="agentName" required maxlength="50"
+          placeholder="Ex.: Assistente de pesquisa">
+        <label for="agentRole">Função</label>
+        <select id="agentRole">
+          <option>Assistente geral</option>
+          <option>Pesquisa e análise</option>
+          <option>Organização de tarefas</option>
+          <option>Atendimento</option>
+          <option>Programação</option>
+        </select>
+        <label for="agentDescription">Descrição</label>
+        <textarea id="agentDescription" maxlength="240"
+          placeholder="O que este agente deverá fazer?"></textarea>
+        <p class="form-note">Nesta versão, o cadastro fica apenas neste navegador.
+          O agente ainda não executa tarefas de IA.</p>
+        <div class="modal-actions">
+          <button type="button" class="secondary-button" id="cancelModal">Cancelar</button>
+          <button type="submit" class="primary-button">Salvar agente</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
