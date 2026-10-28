@@ -171,9 +171,13 @@ if (session?.user) {
     authReady = true;
 
     if (data.session?.user) {
-      showApp(data.session.user);
-    } else {
-      showAuthScreen();
+  showApp(data.session.user);
+
+  if (typeof loadRemoteData === "function") {
+    await loadRemoteData();
+  }
+} else {
+  showAuthScreen();
     }
   } catch (error) {
     authReady = false;
