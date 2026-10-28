@@ -14,6 +14,95 @@ let tasks = loadData(STORAGE_TASKS, []);
 let historyItems = loadData(STORAGE_HISTORY, []);
 let toastTimeout;
 
+let supabaseUser = null;
+let supabaseConnected = false;
+let loadingRemoteData = false;
+
+async function getAuthenticatedUser() {
+  const client = window.agentFlowSupabase;
+
+  if (!client) {
+    throw new Error("A conexão com o Supabase não foi inicializada.");
+  }
+
+  const { data, error } = await client.auth.getUser();
+
+  if (error) throw error;
+
+  if (!data.user) {
+    throw new Error("Entre na sua conta para continuar.");
+  }
+
+  supabaseUser = data.user;
+  return data.user;
+}
+
+async function loadRemoteData() {
+  if (loadingRemoteData) return;
+
+  loadingRemoteData = true;
+
+  try {
+    const client = window.agentFlowSupabase;
+
+    if (!client) {
+      throw new Error("Cliente Supabase indisponível.");
+    }
+
+    const user = await getAuthenticatedUser();
+
+    const [agentsResult, tasksResult] = await Promise.all([
+      client
+        .from("agents")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false }),
+
+      client
+        .from("tasks")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+    ]);
+
+    if (agentsResult.error) throw agentsResult.error;
+    if (tasksResult.error) throw tasksResult.error;
+
+    agents = agentsResult.data.map((item) => ({
+      id: item.id,
+      name: item.name,
+      role: item.role,
+      description: item.description || "",
+      createdAt: item.created_at,
+      remote: true
+    }));
+
+    tasks = tasksResult.data.map((item) => ({
+      id: item.id,
+      title: item.title,
+      type: item.task_type || "Manual",
+      description: item.description || "",
+      status: item.status || "pending",
+      remote: true
+    }));
+
+    supabaseConnected = true;
+
+    renderAgents();
+    renderTasks();
+
+    showToast("Agentes e tarefas sincronizados com o Supabase.");
+  } catch (error) {
+    supabaseConnected = false;
+    console.error("Erro ao carregar dados:", error);
+    showToast(error.message || "Não foi possível carregar os dados.");
+  } finally {
+    loadingRemoteData = false;
+  }
+              }
+
+
+
 const pageNames = {
   inicio: "Visão geral",
   agentes: "Meus agentes",
