@@ -501,6 +501,76 @@ function renderTasks() {
 }
 
 
+$("#newTaskButton").addEventListener("click", async () => {
+  const title = window.prompt("Qual é o nome da tarefa?");
+  if (title === null) return;
+
+  const cleanTitle = title.trim();
+
+  if (!cleanTitle) {
+    showToast("Digite um nome para a tarefa.");
+    return;
+  }
+
+  const button = $("#newTaskButton");
+  button.disabled = true;
+
+  try {
+    const client = window.agentFlowSupabase;
+
+    if (!client) {
+      throw new Error("Conexão com o Supabase indisponível.");
+    }
+
+    const { data: authData, error: authError } =
+      await client.auth.getUser();
+
+    if (authError) throw authError;
+
+    if (!authData.user) {
+      throw new Error("Entre na sua conta antes de cadastrar uma tarefa.");
+    }
+
+    const { data, error } = await client
+      .from("tasks")
+      .insert({
+        user_id: authData.user.id,
+        title: cleanTitle,
+        description: "Tarefa cadastrada manualmente.",
+        task_type: "manual",
+        status: "pending",
+        input: {}
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    const task = {
+      id: data.id,
+      title: data.title,
+      type: data.task_type || "Manual",
+      description: data.description || "",
+      status: data.status || "pending",
+      remote: true
+    };
+
+    tasks.unshift(task);
+
+    addHistory("Tarefa cadastrada", cleanTitle);
+    renderTasks();
+
+    showToast("Tarefa salva no Supabase com sucesso!");
+  } catch (error) {
+    console.error("Erro ao cadastrar tarefa:", error);
+    showToast(
+      error.message || "Não foi possível salvar a tarefa."
+    );
+  } finally {
+    button.disabled = false;
+  }
+});
+
   const title = window.prompt("Qual é o nome da tarefa?");
   if (title === null) return;
 
