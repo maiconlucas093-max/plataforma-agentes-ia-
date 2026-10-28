@@ -571,7 +571,7 @@ $("#newTaskButton").addEventListener("click", async () => {
   }
 });
 
-  const title = window.prompt("Qual é o nome da tarefa?");
+  
   if (title === null) return;
 
   const cleanTitle = title.trim();
