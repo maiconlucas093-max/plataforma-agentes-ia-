@@ -148,9 +148,16 @@ authForm.addEventListener("submit", async (event) => {
 showAuthScreen();
 
 supabaseClient.auth.onAuthStateChange((event, session) => {
-  if (session?.user) {
-    showApp(session.user);
-  } else if (authReady) {
+  
+if (session?.user) {
+  showApp(session.user);
+
+  if (typeof loadRemoteData === "function") {
+    loadRemoteData();
+  }
+}
+  
+  else if (authReady) {
     showAuthScreen();
   }
 });
