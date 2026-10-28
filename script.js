@@ -459,45 +459,7 @@ agentForm.addEventListener("submit", async (event) => {
   }
 });
     
-  event.preventDefault();
-
-  const name = $("#agentName").value.trim();
-  const role = $("#agentRole").value;
-  const description = $("#agentDescription").value.trim();
-
-  if (!name) {
-    showToast("Digite o nome do agente.");
-    return;
-  }
-
-  if (agents.some((agent) =>
-    agent.name.toLowerCase() === name.toLowerCase()
-  )) {
-    showToast("Já existe um agente com esse nome.");
-    return;
-  }
-
-  const agent = {
-    id: Date.now(),
-    name,
-    role,
-    description,
-    createdAt: new Date().toISOString()
-  };
-
-  agents.unshift(agent);
-
-  if (!saveData(STORAGE_AGENTS, agents)) {
-    agents.shift();
-    return;
-  }
-
-  addHistory("Agente cadastrado", name);
-  renderAgents();
-  closeModal();
-  navigate("agentes");
-  showToast("Agente cadastrado neste navegador!");
-});
+  
 
 // Tarefas demonstrativas
 
