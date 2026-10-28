@@ -500,7 +500,7 @@ function renderTasks() {
     `;
 }
 
-$("#newTaskButton").addEventListener("click", () => {
+
   const title = window.prompt("Qual é o nome da tarefa?");
   if (title === null) return;
 
