@@ -574,7 +574,7 @@ $("#newTaskButton").addEventListener("click", async () => {
   
   
 
-  tasks.unshift(task);
+  
 
 
 // Histórico local
