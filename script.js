@@ -576,15 +576,6 @@ $("#newTaskButton").addEventListener("click", async () => {
 
   tasks.unshift(task);
 
-  if (!saveData(STORAGE_TASKS, tasks)) {
-    tasks.shift();
-    return;
-  }
-
-  addHistory("Tarefa cadastrada", cleanTitle);
-  renderTasks();
-  showToast("Tarefa adicionada. Ainda não foi executada.");
-});
 
 // Histórico local
 
