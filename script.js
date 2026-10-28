@@ -378,7 +378,87 @@ document.addEventListener("click", (event) => {
   }
 });
 
-agentForm.addEventListener("submit", (event) => {
+
+agentForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const name = $("#agentName").value.trim();
+  const role = $("#agentRole").value;
+  const description = $("#agentDescription").value.trim();
+
+  if (!name) {
+    showToast("Digite o nome do agente.");
+    return;
+  }
+
+  if (agents.some((agent) =>
+    agent.name.toLowerCase() === name.toLowerCase()
+  )) {
+    showToast("Já existe um agente com esse nome.");
+    return;
+  }
+
+  const submitButton = agentForm.querySelector(
+    'button[type="submit"]'
+  );
+
+  if (submitButton) submitButton.disabled = true;
+
+  try {
+    const client = window.agentFlowSupabase;
+
+    if (!client) {
+      throw new Error("Conexão com o Supabase indisponível.");
+    }
+
+    const { data: authData, error: authError } =
+      await client.auth.getUser();
+
+    if (authError) throw authError;
+
+    if (!authData.user) {
+      throw new Error("Entre na sua conta antes de cadastrar um agente.");
+    }
+
+    const { data, error } = await client
+      .from("agents")
+      .insert({
+        user_id: authData.user.id,
+        name,
+        role,
+        description,
+        configuration: {},
+        is_active: true
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    const agent = {
+      id: data.id,
+      name: data.name,
+      role: data.role,
+      description: data.description || "",
+      createdAt: data.created_at,
+      remote: true
+    };
+
+    agents.unshift(agent);
+
+    addHistory("Agente cadastrado", name);
+    renderAgents();
+    closeModal();
+    navigate("agentes");
+    showToast("Agente salvo no Supabase com sucesso!");
+  } catch (error) {
+    console.error("Erro ao cadastrar agente:", error);
+    showToast(error.message || "Não foi possível salvar o agente.");
+  } finally {
+    if (submitButton) submitButton.disabled = false;
+  }
+});
+    
   event.preventDefault();
 
   const name = $("#agentName").value.trim();
