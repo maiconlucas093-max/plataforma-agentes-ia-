@@ -8,6 +8,7 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY
 );
+window.agentFlowSupabase = supabaseClient;
 
 const authScreen = document.getElementById("authScreen");
 const app = document.querySelector(".app");
