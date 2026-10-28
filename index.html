@@ -10,6 +10,47 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  
+  <section id="authScreen" class="auth-screen" hidden>
+    <div class="auth-card">
+      <a href="#" class="brand auth-brand">
+        <span class="brand-icon">✳</span>
+        <span>Agent<span class="brand-light">Flow</span></span>
+      </a>
+
+      <p class="eyebrow">SUA CENTRAL DE IA</p>
+      <h1 id="authTitle">Bem-vindo de volta</h1>
+      <p class="auth-description" id="authDescription">
+        Entre na sua conta para acessar seus agentes.
+      </p>
+
+      <form id="authForm">
+        <label for="authEmail">E-mail</label>
+        <input id="authEmail" type="email" autocomplete="email"
+          placeholder="voce@exemplo.com" required>
+
+        <label for="authPassword">Senha</label>
+        <input id="authPassword" type="password"
+          autocomplete="current-password" minlength="6"
+          placeholder="Sua senha" required>
+
+        <button id="authSubmit" type="submit" class="primary-button auth-submit">
+          Entrar
+        </button>
+      </form>
+
+      <p id="authMessage" class="auth-message" role="status"
+        aria-live="polite"></p>
+
+      <p class="auth-switch">
+        Ainda não tem conta?
+        <button id="authToggle" type="button" class="text-button">
+          Criar conta
+        </button>
+      </p>
+    </div>
+  </section>
+  
   <div class="app">
     <aside class="sidebar" id="sidebar">
       <a href="#inicio" class="brand">
