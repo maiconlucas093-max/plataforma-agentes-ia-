@@ -572,21 +572,7 @@ $("#newTaskButton").addEventListener("click", async () => {
 });
 
   
-  if (title === null) return;
-
-  const cleanTitle = title.trim();
-
-  if (!cleanTitle) {
-    showToast("Digite um nome para a tarefa.");
-    return;
-  }
-
-  const task = {
-    id: Date.now(),
-    title: cleanTitle,
-    type: "Manual",
-    description: "Tarefa cadastrada localmente."
-  };
+  
 
   tasks.unshift(task);
 
